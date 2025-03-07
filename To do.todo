@@ -1,0 +1,31 @@
+
+To do List : 
+
+✔ Mise en place des fonctionnalités en attente @done (1/30/2025, 11:33:30 AM)
+✔ Dessin d'écran @done (1/30/2025, 3:58:16 PM)
+✔ Conception de la base de données @done (1/30/2025, 11:33:40 AM)
+✔ Conception classe @done (2/19/2025, 4:32:57 PM)
+✔ Mise en place de l'affichage @done (3/5/2025, 9:22:56 AM)
+☐ Développement de l'application 
+
+
+
+Fonctionnalités attendues : 
+
+Opération dans la base de données : 
+    ✔ Insertion des entités de base : avion, modele , typeSiege, ville, passager, vol @done (2/19/2025, 7:52:13 AM)
+        
+        
+BackOffice : 
+    ☐ Protection login/mdp 
+    ☐ CRUD vol 
+    ☐ écran de gestion des promotions  
+        - parametrable : nb de siège en promotion de x% pour une classe et un vol (3 premier par ex)
+    ☐ écran de gestion de reservation :
+        - parametrable : définition de dernière heure de réservation pour un vol
+        - annulation des réservations : 
+
+
+FrontOffice : 
+    ☐ Recherche multicritère vol : champ ville départ/arrivé, date décollage, heure décollage, avion
+    ☐ Réservation de vol 

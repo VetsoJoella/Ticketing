@@ -1,0 +1,54 @@
+
+
+✔ Mise en place URL navigation : @done (3/5/2025, 10:35:54 AM)
+
+    Admin : 
+        ✔ lien de login + test @done (3/5/2025, 10:35:44 AM)
+        ✔ lien vol liste + test @done (3/5/2025, 10:35:45 AM)
+        ✔ lien vol détail + test @done (3/5/2025, 10:35:45 AM)
+        ✔ lien reservation annulation + test @done (3/5/2025, 10:35:46 AM)
+        ✔ lien deconnection + test @done (3/5/2025, 10:35:46 AM)
+
+    Client : 
+        ✔ lien vol détail + test @done (3/5/2025, 10:35:48 AM)
+        ✔ lien reservation vol + test @done (3/5/2025, 10:35:48 AM)
+
+
+
+☐ Mise en place des headers et des footers de chaque page : 
+
+    Admin : 
+        ✔ vol liste + test @done (3/5/2025, 11:43:13 AM)
+        ✔ vol insertion + test @done (3/5/2025, 11:43:14 AM)
+        ✔ vol détail + test @done (3/5/2025, 11:43:15 AM)
+        ✔ reservation annulation + test @done (3/5/2025, 11:43:15 AM)
+    
+    Client : 
+        ✔ vol detail + test @done (3/5/2025, 11:43:19 AM)
+        ✔ reservation vol + test @done (3/5/2025, 11:43:20 AM)
+            
+
+☐ Mise en place des formulaires : 
+    
+    Admin : 
+        ☐ connection
+        ☐ insertion vol 
+        ☐ annulation reservation 
+
+    Client : 
+        ☐ reservation vol
+
+☐ Test général du projet : 
+
+    Test Admin 
+    Test Client
+
+
+    Modification des URLs : 
+        Si cas d'erreur dans l'objet binding : 
+            . On laisse le developpeur décidé de 
+
+
+    Ajout de prix : ( En spring)
+        adulte 
+        enfant
