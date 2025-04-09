@@ -18,6 +18,13 @@ public class Promotion {
 
     // Constructeur
     public Promotion(){}
+
+    public Promotion(String classeAvion, int nb, float pourcentage) throws ValeurInvalideException{
+        setNb(nb);
+        setPourcentage(pourcentage);
+        setClasseAvion(new ClasseAvion(classeAvion));
+        // setClasseAvion(new ClasseAvion(new Classe(classe), nb));
+    }
     
     public Promotion(ClasseAvion classeAvion, int nb, float pourcentage, int reste) throws ValeurInvalideException{
         setClasseAvion(classeAvion);
@@ -89,10 +96,11 @@ public class Promotion {
     // Méthode pour récupérer les promotions d'un vol
     public static Promotion[] getByVol(Connection connexion, Vol vol) throws Exception {
         String requete = "SELECT * FROM Promotion WHERE idVol = ?";
+        ArrayList<Promotion> promotions = new ArrayList<>();
+
         try (PreparedStatement declaration = connexion.prepareStatement(requete)) {
             declaration.setString(1, vol.getId());
             ResultSet resultat = declaration.executeQuery();
-            ArrayList<Promotion> promotions = new ArrayList<>();
             while (resultat.next()) {
                 ClasseAvion classeAvion = new ClasseAvion(); // On suppose que la classe existe déjà
                 classeAvion.setId(resultat.getString("idClasseAvion"));
@@ -106,13 +114,23 @@ public class Promotion {
     // Méthode pour mettre à jour une promotion dans la base de données
     public void update(Connection connexion, Vol vol) throws Exception {
         String requete = "UPDATE promotion SET nb = ?, pourcentage = ?, d_reste = ? WHERE idVol = ? and idClasseAvion = ?";
+        // try (PreparedStatement declaration = connexion.prepareStatement(requete)) {
+        //     declaration.setInt(1, this.getNb());
+        //     declaration.setDouble(2, this.getPourcentage());
+        //     declaration.setInt(3, this.getReste());
+        //     declaration.setString(4, vol.getId());
+        //     declaration.setString(5, this.getClasseAvion().getId());
+        //     declaration.executeUpdate();
+        // }
         try (PreparedStatement declaration = connexion.prepareStatement(requete)) {
             declaration.setInt(1, this.getNb());
             declaration.setDouble(2, this.getPourcentage());
             declaration.setInt(3, this.getReste());
             declaration.setString(4, vol.getId());
             declaration.setString(5, this.getClasseAvion().getId());
-            declaration.executeUpdate();
+    
+            int lignesMisesAJour = declaration.executeUpdate(); // Récupération du nombre de lignes affectées
+            if(lignesMisesAJour == 0) insert(connexion, vol);
         }
     }
 

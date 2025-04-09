@@ -43,9 +43,6 @@ public class ReservationFille {
     }
 
     public float getPromotionSansPourcentage() {
-        if (getPromotion()==0) {
-            return 1 ; 
-        }
         return getPromotion()/100;
     }
 
@@ -70,6 +67,10 @@ public class ReservationFille {
         this.billet = billet;
     }
 
+    double getPrixAvecPromotion() {
+        return getBillet().getPrixVol().getPrix() - getBillet().getPrixVol().getPrix()*getPromotionSansPourcentage();
+    }
+
     public static void insert(Connection connexion, Reservation reservation, ReservationFille[] reservationFilles) throws Exception {
 
         if(reservationFilles == null || reservation == null) return ; 
@@ -80,12 +81,11 @@ public class ReservationFille {
                 declaration.setDouble(1, reservationFille.getPromotion());
                 declaration.setString(2, reservationFille.getBillet().getId());
                 declaration.setString(3, reservation.getId());
-                declaration.setDouble(4, reservationFille.getBillet().getPrixVol().getPrix()*reservationFille.getPromotionSansPourcentage());
+                declaration.setDouble(4, reservationFille.getPrixAvecPromotion());
                 declaration.addBatch(); // Ajouter à la batch
             }
     
             declaration.executeBatch(); 
-            connexion.commit(); 
         } 
 
     }

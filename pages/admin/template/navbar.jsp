@@ -18,7 +18,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#">
+        <a class="nav-link collapsed" href="">
           <i class="bi bi-grid"></i>
           <span>Abroad</span>
         </a>
@@ -30,12 +30,12 @@
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-                <a href="admin/insertionVol">
+                <a href="${pageContext.request.contextPath}/admin/insertionVol">
                   <i class="bi bi-circle"></i><span>Insertion</span>
                 </a>
             </li>
             <li>
-                <a href="admin/vols">
+                <a href="${pageContext.request.contextPath}/admin/vols">
                   <i class="bi bi-circle"></i><span>Liste</span>
                 </a>
             </li>
@@ -48,12 +48,12 @@
       </li><!-- End Components Nav -->
 
       <li class="nav-item">
-        <a class="nav-link " data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link " data-bs-target="#forms-nav" data-bs-toggle="collapse" href="${pageContext.request.contextPath}/">
           <i class="ri-settings-3-fill"></i><span>Réservation</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="reservations">
+            <a href="${pageContext.request.contextPath}/admin/reservations">
               <i class="bi bi-circle"></i><span>Liste reséservation</span>
             </a>
           </li>
@@ -61,7 +61,7 @@
       </li><!-- End Forms Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="admin/deconenction">
+        <a class="nav-link collapsed" href="${pageContext.request.contextPath}/admin/deconnection">
             <i class="bi bi-box-arrow-in-right"></i>
           <span>Deconnection</span>
         </a>

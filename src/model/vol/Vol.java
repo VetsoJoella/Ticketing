@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import exception.ValeurInvalideException;
+import exception.model.vol.VolException;
 import model.avion.Avion;
 import model.avion.classe.ClasseAvion;
 import model.avion.modele.Modele;
@@ -18,6 +20,7 @@ import model.vol.prix.PrixVol;
 import model.vol.prix.promotion.Promotion;
 import model.vol.reservation.Reservation;
 import model.vol.ville.Ville;
+import util.date.DateUtil;
 
 public class Vol {
 
@@ -50,7 +53,7 @@ public class Vol {
     public Vol( Ville villeDepart, Ville villeDestination, Timestamp dateHeureDecollage, float dernierReservation, float derniereAnnulation, PrixVol[] prixVols ) throws Exception {
 
         setPrixVols(prixVols);
-        setBillets(genererBillet(getPrixVols()));
+        // setBillets(genererBillet(getPrixVols()));
         setVilleDepart(villeDepart);
         setVilleDestination(villeDestination);
         setDateHeureDecollage(dateHeureDecollage);
@@ -59,7 +62,7 @@ public class Vol {
         
     }
 
-    public Vol(String id, Ville villeDepart, Ville villeDestination, Timestamp dateHeureDecollage, float dernierReservation, float derniereAnnulation, Avion avion) {
+    public Vol(String id, Ville villeDepart, Ville villeDestination, Timestamp dateHeureDecollage, float dernierReservation, float derniereAnnulation, Avion avion) throws VolException {
         setId(id);
         setVilleDepart(villeDepart);
         setVilleDestination(villeDestination);
@@ -88,12 +91,21 @@ public class Vol {
         this.villeDepart = villeDepart;
     }
 
+    public void setVilleDepart(String villeDepart) {
+        setVilleDepart(new Ville(villeDepart));
+    }
+
     public Ville getVilleDestination() {
         return villeDestination;
     }
 
-    public void setVilleDestination(Ville villeDestination) {
+    public void setVilleDestination(Ville villeDestination) throws VolException{
+        if(villeDestination.getId().equalsIgnoreCase(getVilleDepart().getId())) throw new VolException(this, "La ville de départ ne peut pas etre la ville destination");
         this.villeDestination = villeDestination;
+    }
+
+    public void setVilleDestination(String villeDestination) throws VolException{
+        setVilleDestination(new Ville(villeDestination));
     }
 
     public Timestamp getDateHeureDecollage() {
@@ -104,12 +116,29 @@ public class Vol {
         this.dateHeureDecollage = dateHeureDecollage;
     }
 
+    public void setDateHeureDecollage(String dateHeureDecollage) {
+       System.out.println("Valeur de timestamp à caster est "+dateHeureDecollage);
+       setDateHeureDecollage(DateUtil.formatStr(dateHeureDecollage));
+    }
+
     public PrixVol[] getPrixVols() {
         return prixVols;
     }
 
-    public void setPrixVols(PrixVol[] PrixVols) {
-        this.prixVols = PrixVols;
+    public void setPrixVols(PrixVol[] PrixVols) throws Exception{
+        this.prixVols = PrixVols; 
+        setBillets(genererBillet(getPrixVols()));
+
+    }
+
+    public void setPrixVols(String[] classeAvions, double[] prix) throws Exception{
+
+        List<PrixVol> prixVols = new ArrayList<>() ; 
+        for (int i = 0; i < prix.length; i++) {
+            prixVols.add(new PrixVol(classeAvions[i], prix[i])) ; 
+        }
+        setPrixVols(prixVols.toArray(new PrixVol[0]));
+        // this.prixVols = PrixVols;
     }
 
     public void setPrixVols(Connection connexion) throws Exception{
@@ -147,14 +176,29 @@ public class Vol {
         setBilletDisponibles(Billet.getBilletDisponible(connexion, this));
     } 
 
-
-
     public Promotion[] getPromotions() {
         return promotions;
     }
 
+    public Promotion getPromotion(PrixVol prixVol) {
+        for (Promotion promotion : getPromotions()) {
+            if(promotion.getClasseAvion().getId().equalsIgnoreCase(prixVol.getClasseAvion().getId())) return promotion ;
+        }
+        return new Promotion() ; 
+    }
+
     public void setPromotions(Promotion[] promotions) {
         this.promotions = promotions;
+        System.out.println("Longueur de tableau de promotion "+promotions.length);
+    }
+
+    public void setPromotions(String[] classeAvions, int[] nbs, float[] pourcentage) throws ValeurInvalideException{
+
+        List<Promotion> promotions = new ArrayList<>() ; 
+        for (int i = 0; i < classeAvions.length; i++) {
+            promotions.add(new Promotion(classeAvions[i], nbs[i], pourcentage[i])) ; 
+        }
+        setPromotions(promotions.toArray(new Promotion[0]));
     }
 
     public void setPromotions(Connection connexion) throws Exception {
@@ -169,6 +213,10 @@ public class Vol {
         this.avion = avion;
     }
 
+    public void setAvion(String avion) {
+        setAvion(new Avion(avion));
+    }
+
     public float getDernierReservation() {
         return dernierReservation;
     }
@@ -177,12 +225,20 @@ public class Vol {
         this.dernierReservation = dernierReservation;
     }
 
+    public void setDernierReservation(String dernierReservation) {
+        setDernierReservation(Float.valueOf(dernierReservation));
+    }
+
     public float getDerniereAnnulation() {
         return derniereAnnulation;
     }
 
     public void setDerniereAnnulation(float derniereAnnulation) {
         this.derniereAnnulation = derniereAnnulation;
+    }
+
+    public void setDerniereAnnulation(String derniereAnnulation) {
+        setDerniereAnnulation(Float.valueOf(derniereAnnulation));
     }
 
     // Méthode toString
@@ -285,9 +341,15 @@ public class Vol {
         promotion.insert(connexion, this);
     }
 
-    public void updatePromotion(Connection connexion, Promotion promotion) throws Exception {
+    void updatePromotion(Connection connexion, Promotion promotion) throws Exception {
 
         promotion.update(connexion, this);        
+    }
+
+    public void updatePromotion(Connection connexion) throws Exception {
+        for (Promotion promotion : getPromotions()) {
+            updatePromotion(connexion, promotion);
+        }
     }
 
     public static Vol[] getByCriteria(Connection connexion, String idDepart, String idDestination, String minDecollage, String maxDecollage, String idAvion) throws Exception {
@@ -295,8 +357,8 @@ public class Vol {
         Ville depart = null, destination = null ; 
         Timestamp min = null, max = null; 
         Avion avion = null ;
-        if(idDepart!=null && !idDepart.isEmpty()) depart = new Ville(idDepart);
-        if(idDestination!=null && !idDestination.isEmpty()) destination = new Ville(idDestination);
+        if(idDepart!=null && !idDepart.isEmpty() && !(idDepart.trim()).isEmpty()) depart = new Ville(idDepart);
+        if(idDestination!=null && !idDestination.isEmpty() && !(idDestination.trim()).isEmpty()) destination = new Ville(idDestination);
 
         if(idAvion!=null && !idAvion.isEmpty()) avion = new Avion(idAvion);
         try {
@@ -310,32 +372,36 @@ public class Vol {
         return getByCriteria(connexion, depart, destination, min, max, avion);
 
     }
-    static Vol[] getByCriteria(Connection connexion, Ville depart, Ville destination, Timestamp minDecollage, Timestamp maxDecollage, Avion avion) throws Exception {
+    
+    public static Vol[] getByCriteria(Connection connexion, Ville depart, Ville destination, Timestamp minDecollage, Timestamp maxDecollage, Avion avion) throws Exception {
+
+        System.out.println("Départ "+depart.toString()+" Arrivée "+destination.toString()+" min "+minDecollage +" max "+maxDecollage+" Avion "+avion);
 
         List<Vol> vols = new ArrayList<>() ;
         String requete = "SELECT * from v_vol_avion where 1=1 " ;
 
-        if(depart!=null) requete+=" and idVilleDepart = ? ";
-        if(destination!=null) requete+=" and idVilleDestination = ? ";
+        if(depart!=null && depart.getId()!=null && !depart.getId().isEmpty()) requete+=" and idVilleDepart = ? ";
+        if(destination!=null && destination.getId()!=null && !destination.getId().isEmpty()) requete+=" and idVilleDestination = ? ";
         if(minDecollage!=null) requete+=" and datedecollage >= ? ";
         if(maxDecollage!=null) requete+=" and datedecollage <= ? ";
-        if(avion!=null) requete+=" and idAvion = ? ";
+        if(avion!=null && avion.getId()!=null && !avion.getId().isEmpty()) requete+=" and idAvion = ? ";
 
         try (PreparedStatement declaration = connexion.prepareStatement(requete)) {
 
             int i = 1 ;
-            if(depart!=null) {declaration.setString(i, depart.getId()); i++;}
-            if(destination!=null) {declaration.setString(i, destination.getId()); i++;}
+            if(depart!=null && depart.getId()!=null && !depart.getId().isEmpty()) {declaration.setString(i, depart.getId()); i++;}
+            if(destination!=null && destination.getId()!=null && !destination.getId().isEmpty()) {declaration.setString(i, destination.getId()); i++;}
             if(minDecollage!=null) {declaration.setTimestamp(i, minDecollage); i++;}
             if(maxDecollage!=null) {declaration.setTimestamp(i, maxDecollage); i++;}
-            if(avion!=null) {declaration.setString(i, avion.getId()); i++;}
+            if(avion!=null && avion.getId()!=null && !avion.getId().isEmpty()) {declaration.setString(i, avion.getId()); i++;}
             
             ResultSet resultat = declaration.executeQuery();
+            System.out.println("La requete est "+requete);
             while (resultat.next()) {
                 Vol vol =  new Vol(
                     resultat.getString("id"), 
-                    new Ville(resultat.getString("idvilledepart")), 
-                    new Ville(resultat.getString("idvilledestination")), 
+                    Ville.getById(connexion, resultat.getString("idvilledepart")), 
+                    Ville.getById(connexion, resultat.getString("idvilledestination")), 
                     resultat.getTimestamp("datedecollage"), 
                     resultat.getFloat("d_dernierereservation"), 
                     resultat.getFloat("d_derniereAnnulation"), 
@@ -364,8 +430,8 @@ public class Vol {
             if (resultat.next()) {
                 vol =  new Vol(
                     resultat.getString("id"), 
-                    new Ville(resultat.getString("idvilledepart")), 
-                    new Ville(resultat.getString("idvilledestination")), 
+                    Ville.getById(connexion, resultat.getString("idvilledepart")), 
+                    Ville.getById(connexion, resultat.getString("idvilledestination")), 
                     resultat.getTimestamp("datedecollage"), 
                     resultat.getFloat("d_dernierereservation"), 
                     resultat.getFloat("d_derniereAnnulation"), 
@@ -389,7 +455,7 @@ public class Vol {
 
     public Promotion getNbPromotion(ClasseAvion classeAvion) {
         for (Promotion promotion : getPromotions()) {
-            if(promotion.getClasseAvion().getId().equalsIgnoreCase(classeAvion.getId())){
+            if(promotion.getClasseAvion().getId().equalsIgnoreCase(classeAvion.getId()) && promotion.getReste()>0 ){
                 return promotion ;
             }
         }
@@ -412,6 +478,20 @@ public class Vol {
             throw e ; 
         }
 
+    }
+
+    public void update(Connection connection) throws Exception {
+
+        String requete = "UPDATE vol SET d_dernierereservation = ?, d_derniereannulation = ? WHERE id = ? " ;
+        
+        try (PreparedStatement declaration = connection.prepareStatement(requete)) { 
+
+            declaration.setFloat(1, getDernierReservation());          
+            declaration.setFloat(2, getDerniereAnnulation());   
+            declaration.setString(3, getId());   
+            declaration.executeUpdate() ;       
+
+        } 
     }
 
     // public void annuler(Connection connexion, Reservation reservation, Timestamp dateAnnulation) throws ReservationException {

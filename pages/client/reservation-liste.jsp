@@ -1,8 +1,12 @@
+<%@ page import="model.vol.reservation.Reservation"%>
+
+<% Reservation[] reservations = (Reservation[])Bloom.out(request, "reservations"); %>
+
 
 <%@ include file="/views/template/header.jsp" %>
 <%@ include file="/views/client/template/navbar.jsp" %>
 
-    <div class="pagetitle">
+  <div class="pagetitle">
       <h1>Vol</h1>
       <nav>
         <ol class="breadcrumb">
@@ -11,8 +15,8 @@
           <li class="breadcrumb-item active">Liste Vol</li>
         </ol>
       </nav>
-    </div><!-- End Page Title -->
-    <section class="section" >
+  </div><!-- End Page Title -->
+  <section class="section" >
       <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -25,25 +29,22 @@
                         <th scope="col">#</th>
                         <th scope="col">Passager</th>
                         <th scope="col">Date reservation</th>
-                        <th scope="col">Vol</th>
-                        <th scope="col"></th>
+                        <th scope="col">Nombre de place reservé</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">RSV0001</th>
-                        <th scope="row">Jean</th>
-                        <td>2016-05-25 11:30:00</td>
-                        <td>Antananarivo - Paris</td>
-                        <td><a href="#">Annuler</a></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">RSV0001</th>
-                        <th scope="row">Jean</th>
-                        <td>2016-05-25 11:30:00</td>
-                        <td>Antananarivo - Paris</td>
-                        <td><a href="#">Annuler</a></td>
-                      </tr>
+                    <% if(reservations!=null ) {
+                        for(Reservation reservation : reservations) { %>
+                          <tr>
+                            <th scope="row"><%= reservation.getId() %></th>
+                            <th scope="row"><%= reservation.getPassager().getNom() %></th>
+                            <td><%= reservation.getDateReservation() %></td>
+                            <td><%= reservation.getNbPlaceReservee() %></td>
+                            <td><a href="${pageContext.request.contextPath}/client/reservation?id=<%= reservation.getId() %>">Annuler</a></td>
+                          </tr>
+                      <%  }
+                    } %>
+                      
                     </tbody>
                   </table>
         
@@ -70,6 +71,6 @@
         </div>
       </div>
       
-    </section>
+  </section>
 
 <%@ include file="/views/template/footer.html" %>

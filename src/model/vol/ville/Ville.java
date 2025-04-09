@@ -11,8 +11,11 @@ public class Ville {
     private String nom; // nom de la ville
 
     // Constructeur
+    public Ville() {}
+
     public Ville(String id) {
-        setId(id);    }
+        setId(id);    
+    }
 
     public Ville(String id, String nom) {
         setId(id);
@@ -62,4 +65,14 @@ public class Ville {
             return villes.toArray(new Ville[0]);
         }
     }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", nom='" + getNom() + "'" +
+            "}";
+    }
+
 }

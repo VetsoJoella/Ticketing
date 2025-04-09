@@ -1,5 +1,11 @@
-<%@ include file="/views/admin/template/header.html" %>
+<%@ page import="model.vol.reservation.Reservation"%>
 
+<% Reservation[] reservations = (Reservation[])Bloom.out(request, "reservations"); %>
+
+
+
+<%@ include file="/views/template/header.jsp" %>
+<%@ include file="/views/admin/template/navbar.jsp" %>
 
   <div class="pagetitle">
       <h1>Vol</h1>
@@ -24,25 +30,22 @@
                         <th scope="col">#</th>
                         <th scope="col">Passager</th>
                         <th scope="col">Date reservation</th>
-                        <th scope="col">Vol</th>
-                        <th scope="col"></th>
+                        <th scope="col">Nombre de place reservé</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">RSV0001</th>
-                        <th scope="row">Jean</th>
-                        <td>2016-05-25 11:30:00</td>
-                        <td>Antananarivo - Paris</td>
-                        <td><a href="#">Annuler</a></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">RSV0001</th>
-                        <th scope="row">Jean</th>
-                        <td>2016-05-25 11:30:00</td>
-                        <td>Antananarivo - Paris</td>
-                        <td><a href="#">Annuler</a></td>
-                      </tr>
+                    <% if(reservations!=null ) {
+                        for(Reservation reservation : reservations) { %>
+                          <tr>
+                            <th scope="row"><%= reservation.getId() %></th>
+                            <th scope="row"><%= reservation.getPassager().getNom() %></th>
+                            <td><%= reservation.getDateReservation() %></td>
+                            <td><%= reservation.getNbPlaceReservee() %></td>
+                            <td><a href="${pageContext.request.contextPath}/admin/reservation?id=<%= reservation.getId() %>">Annuler</a></td>
+                          </tr>
+                      <%  }
+                    } %>
+                      
                     </tbody>
                   </table>
         
@@ -71,7 +74,4 @@
       
   </section>
 
-<%@ include file="/views/admin/template/footer.html" %>
-
-  
-  
+<%@ include file="/views/template/footer.html" %>

@@ -31,17 +31,20 @@
 ☐ Mise en place des formulaires : 
     
     Admin : 
-        ☐ connection
-        ☐ insertion vol 
-        ☐ annulation reservation 
+        ✔ connection @done (3/12/2025, 2:53:02 PM)
+        ✔ insertion vol @done (3/12/2025, 3:06:43 PM)
+        ✔ annulation reservation @done (3/17/2025, 11:56:07 AM)
 
     Client : 
-        ☐ reservation vol
+        ✔ reservation vol @done (3/17/2025, 11:56:09 AM)
 
-☐ Test général du projet : 
+✔ Test général du projet : @done (3/17/2025, 11:56:11 AM)
 
     Test Admin 
     Test Client
+
+Reste à faire  :
+    ✔ Suppression de la session utilisateur apres deconnection @done (4/3/2025, 10:29:03 AM)
 
 
     Modification des URLs : 
@@ -52,3 +55,17 @@
     Ajout de prix : ( En spring)
         adulte 
         enfant
+
+    Ajout de frontOffice : 
+        annulation de reservation + saisi 
+
+
+
+SPRINGBOOT : 
+    ☐ Modification de la conception : 
+        Ajout de catégorie d'age + limite 
+        Modification fonction de promotion selon catégorie
+
+
+    ☐ Client : 
+        Insertion de nb enfant et adulte pour une reservation effectué 

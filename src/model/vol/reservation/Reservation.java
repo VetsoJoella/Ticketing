@@ -54,6 +54,11 @@ public class Reservation {
         setDateReservation(date);
     }
 
+    public Reservation(Passager passager, Timestamp date){
+        setPassager(passager);
+        setDateReservation(date);
+    }
+
     Reservation(String id, Passager passager, Timestamp date, ReservationFille[] reservationFilles){
         setId(id);
         setPassager(passager);
@@ -92,7 +97,8 @@ public class Reservation {
     }
 
     void setDateReservation(Timestamp dateReservation) {
-        this.dateReservation = dateReservation;
+        if(dateReservation==null) this.dateReservation = Timestamp.valueOf(LocalDateTime.now()) ;
+        else this.dateReservation = dateReservation;
 
     }
 
@@ -126,6 +132,9 @@ public class Reservation {
         }
     }
 
+    public int getNbPlaceReservee() {
+       return getReservationFilles().length ;
+    }
     // public DetailReservation[] getDetailReservations() {
     //     return this.detailReservations;
     // }
@@ -142,9 +151,19 @@ public class Reservation {
         this.reservationFilles = reservationFilles;
     }
 
+    public void setReservationFilles(Vol vol, String[] classeAvions, int[] nbs) throws ReservationException {
+        
+        List<DetailReservation> detailReservations = new ArrayList<>() ;
+        for (int i = 0; i < classeAvions.length; i++) {
+            detailReservations.add(new DetailReservation(classeAvions[i], nbs[i])) ;
+        }
+        setReservationFilles(vol, detailReservations.toArray(new DetailReservation[0]));
+    }
+
     public void setReservationFilles(Vol vol, DetailReservation[] detailReservations) throws ReservationException{
         // this.reservationFilles = reservationFilles;
 
+        setDateReservation(getDateReservation(), vol) ;
         List<ReservationFille> reservationFilles = new ArrayList<>() ;
         for (DetailReservation detailReservation : detailReservations) {
             
@@ -155,11 +174,12 @@ public class Reservation {
                 promotion.setAChange(false);
                 for (int i = 0; i < detailReservation.getNb(); i++) {
                     ReservationFille reservationFille = new ReservationFille(null, 0, disponibles[i]) ;
-                    // if(promotion.getReste()>0){
-                    reservationFille.setPromotion(promotion.getPourcentage());
-                    promotion.diminuerReste(1);
-                    promotion.setAChange(true);
-                    // }
+                    
+                    if(promotion.getReste()>0){
+                        reservationFille.setPromotion(promotion.getPourcentage());
+                        promotion.diminuerReste(1);
+                        promotion.setAChange(true);
+                    }
                     reservationFilles.add(reservationFille);
                     
                 }
@@ -194,9 +214,9 @@ public class Reservation {
     }
 
     public void insert(Connection connexion, Vol vol) throws Exception {
-
         insertMere(connexion, vol);
         insertFille(connexion);
+      
     }
 
     public static Reservation getById(Connection connexion, String id) throws Exception {
@@ -218,6 +238,29 @@ public class Reservation {
             }
         }
         return reservation ;
+
+    }
+
+    public static Reservation[] getAll(Connection connexion) throws Exception {
+
+        List<Reservation> listes = new ArrayList<>() ;
+        String requete = "SELECT * from reservation WHERE id not in (SELECT idReservation from historiqueannulation) " ; 
+
+        try (PreparedStatement declaration = connexion.prepareStatement(requete)) {    
+            ResultSet resultat = declaration.executeQuery();
+            Reservation reservation = null ; 
+
+            while(resultat.next()) {
+               reservation = new Reservation(
+                resultat.getString("id"),
+                Passager.getById(connexion, resultat.getString("idPassager")),
+                resultat.getTimestamp("datereservation")
+               ) ;
+               reservation.setReservationFilles(ReservationFille.getByReservation(connexion, reservation.getId()));
+               listes.add(reservation) ;
+            }
+        }
+        return listes.toArray(new Reservation[0]) ;
 
     }
 
@@ -252,6 +295,31 @@ public class Reservation {
         }
 
         return vol ;
+    }
+
+    public static Reservation[] getByPassager(Connection connexion, Passager passager) throws Exception {
+
+
+        List<Reservation> listes = new ArrayList<>() ;
+        String requete = "SELECT * from reservation WHERE id not in (SELECT idReservation from historiqueannulation) and idPassager = ? " ; 
+
+        try (PreparedStatement declaration = connexion.prepareStatement(requete)) { 
+            declaration.setString(1, passager.getId());  
+            System.out.println("Requete est "+requete +" id est "+passager.getId()); 
+            ResultSet resultat = declaration.executeQuery();
+            Reservation reservation = null ; 
+
+            while(resultat.next()) {
+               reservation = new Reservation(
+                resultat.getString("id"),
+                Passager.getById(connexion, resultat.getString("idPassager")),
+                resultat.getTimestamp("datereservation")
+               ) ;
+               reservation.setReservationFilles(ReservationFille.getByReservation(connexion, reservation.getId()));
+               listes.add(reservation) ;
+            }
+        }
+        return listes.toArray(new Reservation[0]) ;
     }
 
 

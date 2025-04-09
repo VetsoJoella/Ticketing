@@ -4,7 +4,8 @@
 set "webapps=D:\apache-tomcat-10.1.7\webapps\"
 set "nomProjet=Ticketing" 
 
-set "temporaire=D:\S4\Web dynamique\Temp"
+set "temporaire=D:\Itu\Temp"
+set "assets=assets"
 set "src=src"
 set "lib=lib"
 set "web=pages" 
@@ -18,10 +19,11 @@ rmdir /s /q "%temporaire%"
 @REM mkdir "%temporaire%\META-INF"
 
 rem Creation du dossier web, et lib
-mkdir "%temporaire%\WEB-INF\lib" && mkdir "%temporaire%\views\" && mkdir "%bin%
+mkdir "%temporaire%\WEB-INF\lib" && mkdir "%temporaire%\views\" && mkdir "%bin%" && mkdir "%temporaire%\assets\"
 
 rem Copie du dossier web, we.xml et lib
 xcopy "%lib%" "%temporaire%\WEB-INF\lib" /E && xcopy "%web%" "%temporaire%\views\" /E && copy "%xml%\*" "%temporaire%\WEB-INF\"
+xcopy "%assets%" "%temporaire%\assets\" /E
 
 for /R "%src%" %%f in (*.java) do (
     copy "%%f" "%bin%"

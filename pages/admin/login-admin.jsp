@@ -1,14 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="view.*"%>
-<% Object message = Bloom.out(request, "message") ; 
-    out.println(message);
-  if(message!=null){ %>
-    <script> alert("<%= (String)message %>") </script>
-  <% } 
-  
-%>
 
-<%@ include file="/views/template/header.html" %>
+<%@ include file="/views/template/header.jsp" %>
 
 <body>
 
@@ -35,7 +26,7 @@
                     <h5 class="card-title text-center pb-0 fs-4">Connection admin</h5>
                   </div>
 
-                  <form class="row g-3 needs-validation" action="admin" method="post" novalidate>
+                  <form class="row g-3 needs-validation" action="${pageContext.request.contextPath}/admin" method="post" novalidate>
                     <div class="col-12 form-floating">
                       <input type="text" class="form-control" id="yourUsername" placeholder="Numero téléphone" name="admin.login" required>
                       <label for="yourUsername">Login</label>

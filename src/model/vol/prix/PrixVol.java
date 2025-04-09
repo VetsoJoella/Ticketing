@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exception.ValeurInvalideException;
+import model.avion.Avion;
+import model.avion.classe.Classe;
 import model.avion.classe.ClasseAvion;
 import model.vol.Vol;
 
@@ -18,9 +20,21 @@ public class PrixVol {
     private double prix;        // Prix du vol pour cette classe
 
     // Constructeur
+    public PrixVol(Classe classe, Avion avion, double prix ) throws ValeurInvalideException{
+        
+        setClasseAvion(new ClasseAvion(classe, 0));
+        setPrix(prix);
+    }
+
     public PrixVol( ClasseAvion classeAvion, double prix) throws ValeurInvalideException {
         setClasseAvion(classeAvion);
         setPrix(prix); // Validation du prix dans le constructeur
+    }
+
+    public PrixVol(String classeAvion, double prix) throws ValeurInvalideException {
+        // setClasseAvion(new ClasseAvion(new Classe(classe), 0));
+        setClasseAvion(classeAvion);
+        setPrix(prix);
     }
 
     public PrixVol(String id, ClasseAvion classeAvion, double prix) throws ValeurInvalideException {
@@ -44,6 +58,10 @@ public class PrixVol {
 
     public void setClasseAvion(ClasseAvion classeAvion) {
         this.classeAvion = classeAvion;
+    }
+
+    public void setClasseAvion(String classeAvion) {
+        setClasseAvion(new ClasseAvion(classeAvion));
     }
 
     public double getPrix() {

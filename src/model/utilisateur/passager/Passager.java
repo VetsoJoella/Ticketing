@@ -48,6 +48,23 @@ public class Passager extends Utilisateur{
     }
 
     // Méthode pour récupérer un Admin par son login
+    public Passager getByNumero(Connection connection) throws Exception {
+        
+        String query = "SELECT * FROM passager WHERE nom = ? and numero = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, getNom());
+            stmt.setString(2, getNumero());
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Passager(rs.getString("id"), rs.getString("numero"), rs.getString("nom"));
+            } 
+            return null ;
+        }
+    }
+
+   
     public static Passager getById(Connection connection, String id) throws Exception {
         
         String query = "SELECT * FROM passager WHERE id = ? ";
@@ -56,20 +73,22 @@ public class Passager extends Utilisateur{
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Passager(rs.getString("id"), rs.getString("numero"),rs.getString("login"));
+                return new Passager(rs.getString("id"), rs.getString("numero"),rs.getString("nom"));
             } 
             return null ;
         }
     }
 
+   
     // Méthode pour se connecter
     public void se_connecter(Connection connection) throws Exception {
 
         Passager passager = null;
     
-        passager = getById(connection, getNumero()) ;
+        passager = getByNumero(connection) ;
         if(passager==null) throw new AuthentificationException(null, "Login ou mot de passe incorrect.");
-        setNumero(passager.getNumero());
+        setId(passager.getId());
+        System.out.println("Utilisateur bien authentifié "+passager.toString());
       
     }
 
@@ -89,5 +108,16 @@ public class Passager extends Utilisateur{
             }
         }
     }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id = "+ getId()+
+            ", numero='" + getNumero() + "'" +
+            ", nom='" + getNom() + "'" +
+            "}";
+    }
+
 
 }

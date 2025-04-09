@@ -39,6 +39,16 @@ public class AnnulationReservation {
 
     }
 
+    public AnnulationReservation(Connection connexion, Timestamp dateAnnulation, Reservation reservation) throws Exception{
+        setReservation(reservation);
+        setDateAnnulation(getReservation().getVolRelie(connexion), dateAnnulation);
+    }
+
+    public AnnulationReservation(Connection connexion, Timestamp dateAnnulation, String idReservation) throws Exception{
+        setReservation(connexion, idReservation);
+        setDateAnnulation(getReservation().getVolRelie(connexion) ,dateAnnulation);
+    }
+
     // Getter et setter
     public String getId() {
         return this.id;
@@ -55,6 +65,7 @@ public class AnnulationReservation {
     public void setDateAnnulation(Vol vol, Timestamp dateAnnulation) throws ReservationException{
         Timestamp derniereAnnulation = DateUtil.ajouterHeure(vol.getDateHeureDecollage(), -vol.getDerniereAnnulation());
         
+        if(dateAnnulation==null) dateAnnulation = Timestamp.valueOf(LocalDateTime.now());
         if(dateAnnulation.after(derniereAnnulation) || dateAnnulation.equals(derniereAnnulation)) throw new ReservationException(getReservation(), "Impossible d'annuler la réservation : la date de dernère annulation est déjà dépassée");
         this.dateAnnulation = dateAnnulation;
     }
@@ -94,6 +105,11 @@ public class AnnulationReservation {
         this.reservation = reservation;
     }
 
+    public void setReservation(Connection connexion, String idReservation) throws Exception {
+        setReservation(new Reservation(idReservation));
+        setReservation(connexion);
+    }
+
     public void setReservation(String idReservation) {
         // this.reservation = reservation;
         setReservation(new Reservation(idReservation));
@@ -130,5 +146,16 @@ public class AnnulationReservation {
         }
         
     }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", dateAnnulation='" + getDateAnnulation() + "'" +
+            ", reservation='" + getReservation() + "'" +
+            "}";
+    }
+
     
 }

@@ -19,19 +19,19 @@
       <ul class="sidebar-nav" id="sidebar-nav">
   
         <li class="nav-item">
-          <a class="nav-link collapsed" href="#">
+          <a class="nav-link collapsed" href="">
             <i class="bi bi-grid"></i>
             <span>Abroad</span>
           </a>
         </li><!-- End Dashboard Nav -->
   
         <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="${pageContext.request.contextPath}/">
             <i class="ri-plane-line"></i><span> Vol </span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-              <a href="client/vols">
+              <a href="${pageContext.request.contextPath}/client/vols">
                 <i class="bi bi-circle"></i><span>Liste</span>
               </a>
             </li>
@@ -39,12 +39,12 @@
         </li><!-- End Components Nav -->
   
         <li class="nav-item">
-          <a class="nav-link " data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <a class="nav-link " data-bs-target="#forms-nav" data-bs-toggle="collapse" href="${pageContext.request.contextPath}/client">
             <i class="ri-lock-2-fill"></i><span>Réservation</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
             <li>
-              <a href="reservations">
+              <a href="${pageContext.request.contextPath}/client/reservations">
                 <i class="bi bi-circle"></i><span>Liste</span>
               </a>
             </li>
@@ -53,7 +53,7 @@
   
   
         <li class="nav-item">
-          <a class="nav-link collapsed" href="client/deconenction">
+          <a class="nav-link collapsed" href="${pageContext.request.contextPath}/client/deconnection">
             <i class="bi bi-box-arrow-in-right"></i>
             <span>Deconnection</span>
           </a>

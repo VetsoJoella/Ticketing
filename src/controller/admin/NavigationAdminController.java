@@ -2,14 +2,26 @@ package controller.admin;
 
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.Timestamp;
 
-import annotation.AnnotationController;
-import annotation.Url;
-import annotation.security.auth.role.Role;
+
+import itu.springboot.annotation.AnnotationController;
+import itu.springboot.annotation.Url;
+import itu.springboot.annotation.Post;
+import itu.springboot.annotation.Param;
+import itu.springboot.annotation.security.auth.role.Role;
+import itu.springboot.services.connection.UtilDb;
+import itu.springboot.view.response.ModelView;
+import itu.springboot.classes.session.Session;
+import itu.springboot.view.response.RedirectAttributes;
+
+import model.avion.Avion;
+import model.avion.classe.Classe;
 import model.utilisateur.admin.Admin;
 import model.vol.Vol;
-import response.ModelView;
-import util.connection.UtilDb;
+import model.vol.reservation.Reservation;
+import model.vol.ville.Ville;
 
 @AnnotationController
 public class NavigationAdminController {
@@ -26,61 +38,22 @@ public class NavigationAdminController {
     
     } 
 
-    @Url(url = "/admin/vols")
-    @Role(value = Admin.class)
-    public ModelView accueil(){
+    @Url(url = "/admin")
+    @Post
+    public String connection(Session session, Admin admin, RedirectAttributes redirectAttributes, UtilDb utilDb){
 
-        ModelView modelView = new ModelView("/views/vol-liste.jsp") ;
-        try (Connection connection = UtilDb.getConnection()) {
-            connection.setAutoCommit(false);
-            System.out.println("Connection réussie");
-
-            Vol[] vols = Vol.getByCriteria(connection, null, null, null, null, null); 
-            modelView.add("vols", vols);
-
+        System.out.println(admin.toString());
+        try(Connection connection = utilDb.getConnection()) {
+            admin.se_connecter(connection);
+            session.add("utilisateur", admin);
+            
         } catch(Exception err) {
+            err.printStackTrace();
+            redirectAttributes.addFlashAttribute("message", err.getMessage());
+            return "redirect:/admin"; 
+        } 
 
-        }
-        return modelView ; 
-    }
-
-    // @Url(url="/admin")
-    // @Post
-    // public ModelView connection() {
-
-    //     return new ModelView("/views/admin/login-admin.jsp");
-    
-    // } 
-
-    @Url(url = "/admin/vol")
-    @Role(value = Admin.class)
-    public ModelView getDetailVol() {
-        
-        ModelView modelView = new ModelView("/views/admin/vol-detail.jsp") ; 
-        return modelView ; 
-    }
-
-    // @Auth
-    // @Role(value = Admin.class)
-    // @Url(url = "/admin/vol")
-    @Url(url = "/admin/insertionVol")
-    public ModelView insertionVol(){
-        ModelView modelView = new ModelView("/views/admin/vol-insertion.jsp") ; 
-        return modelView ; 
-    }    
-
-    @Url(url = "/admin/vol/upt")
-    // @Post
-    // @Auth
-    // @Role(value = Admin.class)
-    public ModelView majVol(){
-        ModelView modelView = new ModelView("/views/admin/vol-modification.jsp") ; 
-        return modelView ; 
-    } 
-    
-    @Url(url = "/admin/deconnection")
-    public ModelView deconnection() {
-        return new ModelView("/views/admin/login-admin.jsp") ; 
+        return "redirect:/admin/insertionVol" ; 
     }
     
 }

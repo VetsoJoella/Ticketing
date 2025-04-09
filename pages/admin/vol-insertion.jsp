@@ -1,14 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="view.*"%>
-<% String message = Bloom.out(request, "message") ; 
+<%@ page import="model.vol.ville.Ville"%>
+<%@ page import="model.avion.Avion"%>
+<%@ page import="model.avion.classe.Classe"%>
 
-  if(message!=null){ %>
-    <script> alert("<%= message %>") </script>
-  <% } 
-  
+
+<% 
+  // Utilisateur utilisateur = (Utilisateur)session.getAttribute("utilisateur") ; 
+   Ville[] villes = (Ville[])Bloom.out(request, "villes") ;   
+   Classe[] classes = (Classe[])Bloom.out(request, "classes") ; 
+   Avion[] avions = (Avion[])Bloom.out(request, "avions") ;  
 %>
-<%@ include file="/views/template/header.html" %>
-<%@ include file="/views/admin/template/navbar.html" %>
+
+<%@ include file="/views/template/header.jsp" %>
+<%@ include file="/views/admin/template/navbar.jsp" %>
 
     <div class="pagetitle">
       <h1>Vol</h1>
@@ -29,32 +32,35 @@
               <h5 class="card-title">Insertion Vol</h5>
 
               <!-- Horizontal Form -->
-              <form>
+              <form method="post" action="admin/insertionVol">
                 <div class="row mb-3">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Date décollage</label>
+                  <label for="decollage" class="col-sm-2 col-form-label">Date décollage</label>
                   <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" name="dateDecollage" id="inputEmail">
+                    <input type="datetime-local" class="form-control" name="vol.dateHeureDecollage" id="decollage">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="inputPassword3" class="col-sm-2 col-form-label">Dernière heure résérvation </label>
+                  <label for="derniereReservation" class="col-sm-2 col-form-label">Dernière heure résérvation </label>
                   <div class="col-sm-10">
-                    <input type="number" class="form-control" id="inputPassword" name="derniereReservation">
+                    <input type="number" class="form-control" id="derniereReservation" name="vol.dernierReservation">
                   </div>
                 </div>
                 <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Dernière heure annulation </label>
+                    <label for="derniereAnnulation" class="col-sm-2 col-form-label">Dernière heure annulation </label>
                     <div class="col-sm-10">
-                      <input type="number" class="form-control" id="inputPassword" name="derniereAnnulation">
+                      <input type="number" class="form-control" id="derniereAnnulation" name="vol.derniereAnnulation">
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label for="inputEmail3" class="col-sm-2 col-form-label">Avion</label>
+                    <label for="avion" class="col-sm-2 col-form-label">Avion</label>
                     <div class="col-sm-10">
-                      <select class="form-select" id="inputText" name="vol">
-                          <option value="">Avion 1</option>
-                          <option value="">Avion 2</option>
-                          <option value="">Avion 3</option>
+                      <select class="form-select" id="avion" name="vol.avion">
+                      <% if(avions!=null && avions.length>0) {
+                          for(Avion avion : avions) { %>
+                            <option value="<%= avion.getId() %>"><%= avion.getNom() %></option>
+                      <%  }
+                        } %>
+                        
                       </select>
                     </div>
                 </div>
@@ -62,64 +68,59 @@
                 <br><h6 class="card-title">Destination</h6>
                 <div class="row mb-3">
                     <div class="col-6">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Ville départ</label>
+                        <label for="villeDepart" class="col-form-label">Ville départ</label>
                         <div class="col-sm-10">
-                          <select class="form-select" id="inputText" name="villeDepart">
-                              <option value="">Ville 1</option>
-                              <option value="">Ville 2</option>
-                              <option value="">Ville 3</option>
+                          <select class="form-select" id="villeDepart" name="vol.villeDepart">
+                            <% if(villes!=null && villes.length>0) {
+                                for(Ville ville : villes) { %>
+                                  <option value="<%= ville.getId() %>"><%= ville.getNom() %></option>
+                            <%  }
+                              } %>
                           </select>
                         </div>
                     </div>
                     <div class="col-6">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Ville arrivée</label>
+                        <label for="villeArrive" class="col-form-label">Ville arrivée</label>
                         <div class="col-sm-10">
-                          <select class="form-select" id="inputText" name="villeArrive">
-                              <option value="">Ville 1</option>
-                              <option value="">Ville 2</option>
-                              <option value="">Ville 3</option>
+                          <select class="form-select" id="villeArrive" name="vol.villeDestination">
+                            <% if(villes!=null && villes.length>0) {
+                                for(Ville ville : villes) { %>
+                                  <option value="<%= ville.getId() %>"><%= ville.getNom() %></option>
+                            <%  }
+                              } %>
                           </select>
                         </div>
                     </div>
                 </div>
               
-                <h6 class="card-title mb-2">Prix du voyage</h6>
-                <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-4 col-form-label text-center"> Classe Premium</label>
-                    <div class="col-4 form-floating">
-                        <input type="text" name="nb" class="form-control" id="nb" required>
-                        <label for="nb">Nb promotion</label>
-                    </div>
-                    <div class="col-4 form-floating">
-                        <input type="text" name="promotion" class="form-control" id="promotion" required>
-                        <label for="promotion">Pourcentage</label>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-4 col-form-label text-center"> Classe Economique</label>
-                    <div class="col-4 form-floating">
-                        <input type="text" name="nb" class="form-control" id="nb" required>
-                        <label for="nb">Nb promotion</label>
-                    </div>
-                    <div class="col-4 form-floating">
-                        <input type="text" name="promotion" class="form-control" id="promotion" required>
-                        <label for="promotion">Pourcentage</label>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-4 col-form-label text-center"> Classe Affaire</label>
-                    <div class="col-4 form-floating">
-                        <input type="text" name="nb" class="form-control" id="nb" required>
-                        <label for="nb">Nb promotion</label>
-                    </div>
-                    <div class="col-4 form-floating">
-                        <input type="text" name="promotion" class="form-control" id="promotion" required>
-                        <label for="promotion">Pourcentage</label>
-                    </div>
-                </div>
+                <h6 class="card-title mb-2">Promotion & Prix</h6>
+                <div id="prixPromotionSection"></div>
+                <%-- <% if(classes!=null) {
+                    for(Classe classe : classes) { %>
+                      <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label text-center"> Classe <%= classe.getType() %></label>
+                        <input type="hidden" name="classes[]" class="form-control" value="<%= classe.getId() %>" required>
+                        
+                        <div class="col-3 form-floating">
+                            <input type="text" name="prix[]" class="form-control" id="prix" required>
+                            <label for="prix">Prix</label>
+                        </div>
+                        <div class="col-3 form-floating">
+                            <input type="text" name="nbs[]" class="form-control" id="nb" required>
+                            <label for="nb">Nb promotion</label>
+                        </div>
+                        <div class="col-3 form-floating">
+                            <input type="text" name="promotions[]" class="form-control" id="promotion" required>
+                            <label for="promotion">Pourcentage</label>
+                        </div>
+                        
+                      </div>
+                    <% }
+                  }
+                %>  --%>
 
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Modifier</button>
+                  <button type="submit" class="btn btn-primary">Insérer</button>
                   <button type="reset" class="btn btn-secondary">Réinitialiser</button>
                 </div>
               </form><!-- End Horizontal Form -->
@@ -129,5 +130,6 @@
         </div>
       </div>
     </section>
+
 
 <%@ include file="/views/template/footer.html" %>

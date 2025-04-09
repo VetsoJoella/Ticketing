@@ -15,6 +15,12 @@ public class DetailReservation {
         setClasseAvion(classeAvion);
     }
 
+    public DetailReservation(String classeAvion, int nb){
+        setNb(nb);
+        setClasseAvion(classeAvion);
+    }
+
+
     public DetailReservation(ClasseAvion classeAvion, int nb){
         setNb(nb);
         setClasseAvion(classeAvion);

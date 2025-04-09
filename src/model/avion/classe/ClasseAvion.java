@@ -67,7 +67,7 @@ public class ClasseAvion {
             while (resultat.next()) {
                 Classe classe = new Classe(resultat.getString("idClasse"), null); // On suppose que la classe existe déjà
                 classe.setById(connexion);
-                classesAvion.add(new ClasseAvion(classe, resultat.getInt("nbsiege")));
+                classesAvion.add(new ClasseAvion(resultat.getString("id"),classe, resultat.getInt("nbsiege")));
             }
             return classesAvion.toArray(new ClasseAvion[0]);
         }

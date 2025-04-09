@@ -3,6 +3,7 @@ package model.avion.classe;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Classe {
 
@@ -47,6 +48,19 @@ public class Classe {
             } else {
                 throw new Exception("Aucune classe trouvée avec l'id : " + this.getId());
             }
+        }
+    }
+
+    public static Classe[] getAll(Connection connexion) throws Exception {
+
+        String requete = "SELECT * FROM classe";
+        try (PreparedStatement declaration = connexion.prepareStatement(requete)) {
+            ResultSet resultat = declaration.executeQuery();
+            ArrayList<Classe> classes = new ArrayList<>();
+            while (resultat.next()) {
+                classes.add(new Classe(resultat.getString("id"), resultat.getString("type")));
+            }
+            return classes.toArray(new Classe[0]);
         }
     }
 

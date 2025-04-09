@@ -8,7 +8,7 @@
   <!-- Configuration du DispatcherServlet -->
   <servlet>
     <servlet-name>FrontController</servlet-name>
-    <servlet-class>controller.main.FrontController</servlet-class>
+    <servlet-class>itu.springboot.controller.main.FrontController</servlet-class>
     <init-param>
         <param-name>contollerPath</param-name>
         <!-- <param-value>com.contoller</param-value> -->
@@ -26,6 +26,11 @@
   <servlet-mapping>
     <servlet-name>FrontController</servlet-name>
     <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/assets/*</url-pattern>
   </servlet-mapping>
 
 </web-app>
