@@ -43,13 +43,13 @@
               <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-2 col-form-label">Dernière heure réservation </label>
                 <div class="col-sm-10">
-                  <input type="number" class="form-control" id="inputPassword" name="vol.dernierReservation" value="<%= vol.getDernierReservation() %>" disabled>
+                  <input type="datetime-local" class="form-control" id="inputPassword" name="vol.dernierReservation" value="<%= vol.getDateDernierReservation() %>" disabled>
                 </div>
               </div>
               <div class="row mb-3">
                   <label for="inputPassword3" class="col-sm-2 col-form-label">Dernière heure annulation </label>
                   <div class="col-sm-10">
-                    <input type="number" class="form-control" id="inputPassword" name="vol.derniereAnnulation" value="<%= vol.getDerniereAnnulation() %>" disabled>
+                    <input type="datetime-local" class="form-control" id="inputPassword" name="vol.derniereAnnulation" value="<%= vol.getDateDerniereAnnulation() %>" disabled>
                   </div>
               </div>
               <div class="row mb-3">

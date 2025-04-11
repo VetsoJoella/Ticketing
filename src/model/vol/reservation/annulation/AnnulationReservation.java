@@ -64,7 +64,7 @@ public class AnnulationReservation {
 
     public void setDateAnnulation(Vol vol, Timestamp dateAnnulation) throws ReservationException{
         Timestamp derniereAnnulation = DateUtil.ajouterHeure(vol.getDateHeureDecollage(), -vol.getDerniereAnnulation());
-        
+        System.out.println("Valeur de date annulation "+dateAnnulation+" valeur de date décollage "+vol.getDateHeureDecollage()+" et dernière annulation "+derniereAnnulation);
         if(dateAnnulation==null) dateAnnulation = Timestamp.valueOf(LocalDateTime.now());
         if(dateAnnulation.after(derniereAnnulation) || dateAnnulation.equals(derniereAnnulation)) throw new ReservationException(getReservation(), "Impossible d'annuler la réservation : la date de dernère annulation est déjà dépassée");
         this.dateAnnulation = dateAnnulation;

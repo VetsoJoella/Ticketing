@@ -97,14 +97,14 @@ public class ConnectionClientController {
 
     @Url(url="/client/reservation")
     @Post 
-    public String reserverUnVol(Vol vol, @Param(name="nbs[]") int[] nbs, @Param(name="classeAvions[]")String[] classeAvions, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
+    public String reserverUnVol(Vol vol, @Param(name="nbs[]") Integer[] nbs, @Param(name="classeAvions[]")String[] classeAvions, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
 
         try (Connection connection = utilDb.getConnection()) {
             // System.out.println("Valeur de vol est "+vol);
-            // System.out.println("Valeur de nbs et de classe Avion est ");
-            // for (int i = 0; i < classeAvions.length; i++) {
-            //     System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]);
-            // }
+            System.out.println("Valeur de nbs et de classe Avion est ");
+            for (int i = 0; i < classeAvions.length; i++) {
+                System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]);
+            }
             // vol.setBilletDisponibles(connection) ; vol.setPromotion(connection);
             vol = Vol.getById(connection, vol.getId()) ;
             Reservation reservation = new Reservation((Passager)session.get("utilisateur"), null) ;

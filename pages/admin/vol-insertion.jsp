@@ -32,7 +32,7 @@
               <h5 class="card-title">Insertion Vol</h5>
 
               <!-- Horizontal Form -->
-              <form method="post" action="admin/insertionVol">
+              <form method="post" action="${pageContext.request.contextPath}/admin/insertionVol">
                 <div class="row mb-3">
                   <label for="decollage" class="col-sm-2 col-form-label">Date décollage</label>
                   <div class="col-sm-10">

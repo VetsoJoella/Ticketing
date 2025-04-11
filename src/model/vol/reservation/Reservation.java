@@ -104,6 +104,8 @@ public class Reservation {
 
     public void setDateReservation(Timestamp dateReservation, Vol vol ) throws ReservationException{
         Timestamp dernierReservation = DateUtil.ajouterHeure(vol.getDateHeureDecollage(), -vol.getDernierReservation()) ;
+        // System.out.println("Valeur de date annulation "+dateReservation+" valeur de date décollage "+vol.getDateHeureDecollage()+" et dernière annulation "+dernierReservation);
+
         if(dateReservation.after(vol.getDateHeureDecollage()) || dateReservation.equals(vol.getDateHeureDecollage())) throw new ReservationException(this, "Impossible de faire une reservation sur ce vol : la date de réservation est déjà depassé") ;
         
         if(dateReservation.after(dernierReservation) || dateReservation.equals(dernierReservation)) throw new ReservationException(this, "Impossible de faire une reservation sur ce vol : la reservation est déjà close") ;
@@ -151,7 +153,7 @@ public class Reservation {
         this.reservationFilles = reservationFilles;
     }
 
-    public void setReservationFilles(Vol vol, String[] classeAvions, int[] nbs) throws ReservationException {
+    public void setReservationFilles(Vol vol, String[] classeAvions, Integer[] nbs) throws ReservationException {
         
         List<DetailReservation> detailReservations = new ArrayList<>() ;
         for (int i = 0; i < classeAvions.length; i++) {
@@ -166,8 +168,9 @@ public class Reservation {
         setDateReservation(getDateReservation(), vol) ;
         List<ReservationFille> reservationFilles = new ArrayList<>() ;
         for (DetailReservation detailReservation : detailReservations) {
-            
             Billet[] disponibles = vol.getBilletDisponibles(detailReservation.getClasseAvion()) ;
+            System.out.println("Billet disponible "+disponibles.length+" requis est "+detailReservation.getNb()+" Pour la classe "+detailReservation.getClasseAvion().getId());
+
             if(disponibles.length<detailReservation.getNb()) throw new ReservationException(this, "Billet insuffisant pour la classe "+detailReservation.getClasseAvion()) ;
             else {
                 Promotion promotion = vol.getNbPromotion(detailReservation.getClasseAvion()) ;
