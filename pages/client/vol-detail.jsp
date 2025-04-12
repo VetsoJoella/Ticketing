@@ -125,10 +125,15 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <h6 class="card-title mb-2">Prix du voyage</h6>
+                  <h6 class="card-title mb-2">Information réservation</h6>
                   <form method="post" action="${pageContext.request.contextPath}/client/reservation" id="reservationForm" enctype="multipart/form-data">
                       <input type="hidden" name="vol.id" value="<%= vol.getId() %>">
-                      <input type="file" name="image" accept="image/*" class="form-control">
+                      <div class="col-12">
+                        <label for="file" class="col-3 col-form-label">Visa</label>
+                        <div class="col-9">
+                          <input type="file" name="file" accept="image/*" id="file" class="form-control">
+                        </div>
+                      </div>
                       <div class="row mb-3 align-items-end">
                           <div class="col-md-4">
                               <label>Classe</label>

@@ -29,6 +29,7 @@ public class Reservation {
     Timestamp dateReservation ; 
     // DetailReservation[] detailReservations ; 
     ReservationFille[] reservationFilles ;
+    String image ;
 
     // Constructeur 
     public Reservation(){}
@@ -205,13 +206,22 @@ public class Reservation {
         setReservationFilles(reservationFilles.toArray(new ReservationFille[0]));
     }
 
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     void insertMere(Connection connexion, Vol vol) throws Exception {
 
-        String requete = "INSERT INTO reservation(id, datereservation, idpassager, idVol) VALUES (DEFAULT, ?, ?, ?)" ;
+        String requete = "INSERT INTO reservation(id, datereservation, idpassager, idVol, image) VALUES (DEFAULT, ?, ?, ?, ?)" ;
         try (PreparedStatement declaration = connexion.prepareStatement(requete, Statement.RETURN_GENERATED_KEYS)) {    
             declaration.setTimestamp(1, getDateReservation());
             declaration.setString(2, getPassager().getId());
             declaration.setString(3, vol.getId());
+            declaration.setString(4, getImage());
 
             declaration.executeUpdate();
             
@@ -251,6 +261,7 @@ public class Reservation {
                 resultat.getString("idPassager"),
                 resultat.getString("datereservation")
                ) ;
+               reservation.setImage(resultat.getString("image"));
                reservation.setReservationFilles(ReservationFille.getByReservation(connexion, id));
             }
         }
@@ -273,6 +284,7 @@ public class Reservation {
                 Passager.getById(connexion, resultat.getString("idPassager")),
                 resultat.getTimestamp("datereservation")
                ) ;
+               reservation.setImage(resultat.getString("image"));
                reservation.setReservationFilles(ReservationFille.getByReservation(connexion, reservation.getId()));
                listes.add(reservation) ;
             }
@@ -332,6 +344,7 @@ public class Reservation {
                 Passager.getById(connexion, resultat.getString("idPassager")),
                 resultat.getTimestamp("datereservation")
                ) ;
+               reservation.setImage(resultat.getString("image"));
                reservation.setReservationFilles(ReservationFille.getByReservation(connexion, reservation.getId()));
                listes.add(reservation) ;
             }

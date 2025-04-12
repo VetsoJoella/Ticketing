@@ -12,6 +12,7 @@ import itu.springboot.services.connection.UtilDb;
 import itu.springboot.view.response.ModelView;
 import itu.springboot.classes.session.Session;
 import itu.springboot.view.response.RedirectAttributes;
+import itu.springboot.classes.mulitpart.* ;
 
 import model.avion.Avion;
 import model.utilisateur.admin.Admin;
@@ -26,6 +27,7 @@ import model.vol.ville.Ville;
 @Role(value = Passager.class)
 public class ConnectionClientController {
 
+    private final String pathFile = "D:\\apache-tomcat-10.1.7\\webapps\\Ticketing\\assets\\images" ;
     // Annulation de réservation d'un client 
     @Url(url = "/client/reservation")
     public String annulationReservation(String id, UtilDb utilDb, RedirectAttributes redirectAttributes) {
@@ -100,11 +102,11 @@ public class ConnectionClientController {
 
     @Url(url="/client/reservation")
     @Post 
-    public String reserverUnVol(Vol vol, @Param(name="nbs[]") Integer[] nbs, @Param(name="classeAvions[]")String[] classeAvions, @Param(name="categories[]")String[] categorieStr, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
+    public String reserverUnVol(Vol vol, @Param(name="nbs[]") Integer[] nbs, @Param(name="classeAvions[]")String[] classeAvions, @Param(name="categories[]")String[] categorieStr, MultiPart file ,Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
 
         try (Connection connection = utilDb.getConnection()) {
             // System.out.println("Valeur de vol est "+vol);
-            System.out.println("Valeur de nbs et de classe Avion est ");
+            System.out.println("Valeur de nbs et de classe Avion est "+file.getName() +" - "+file.getRealName());
             for (int i = 0; i < classeAvions.length; i++) {
                 System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]+" catégorie "+categorieStr[i]);
             }
@@ -112,9 +114,10 @@ public class ConnectionClientController {
             vol = Vol.getById(connection, vol.getId()) ;
             Categorie[] categories = Categorie.getById(connection, categorieStr) ;
             Reservation reservation = new Reservation((Passager)session.get("utilisateur"), null) ;
+            reservation.setImage(file.getRealName());
             reservation.setReservationFilles(vol, classeAvions, categories, nbs);
             vol.reserver(connection, reservation);
-
+            file.saveAsFile(pathFile+"\\"+file.getRealName()) ;
             redirectAttributes.addFlashAttribute("message", "Vol réservé") ;
                  
         } catch (Exception e) {
