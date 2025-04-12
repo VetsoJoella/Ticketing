@@ -5,7 +5,7 @@
 <%@ page import="model.utilisateur.categorie.Categorie" %>
 
 <% Vol vol = (Vol)Bloom.out(request, "vol") ;  
-  Categorie[] categories = (Categorie)Bloom.out(request, "categories") ;
+  Categorie[] categories = (Categorie[])Bloom.out(request, "categories") ;
   if(vol==null) {
     vol = new Vol() ;
   }
