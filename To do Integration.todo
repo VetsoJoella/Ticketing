@@ -1,71 +1,32 @@
 
+Ajout de promotion : 
 
-✔ Mise en place URL navigation : @done (3/5/2025, 10:35:54 AM)
+    Métier : 
+    ✔ Ajout de classe Categorie : @done (4/12/2025, 4:59:57 PM)
+        - args : id,  nom, promotion 
+        - constructeur avec un id seulement
+        - Categorie[] getAll(Connection) throws Exception 
+        - Categorie getById(Connection) throws Exception
+        - static Categorie[] setById(Connection, String[]) throws Exception
+           setById(Connection, Categorie[])
+        
 
-    Admin : 
-        ✔ lien de login + test @done (3/5/2025, 10:35:44 AM)
-        ✔ lien vol liste + test @done (3/5/2025, 10:35:45 AM)
-        ✔ lien vol détail + test @done (3/5/2025, 10:35:45 AM)
-        ✔ lien reservation annulation + test @done (3/5/2025, 10:35:46 AM)
-        ✔ lien deconnection + test @done (3/5/2025, 10:35:46 AM)
+    ✔ Modification DetailReservation : @done (4/12/2025, 4:59:59 PM)
+        + args : Categorie 
+        - modification de constructeur acceptant categorie  
 
-    Client : 
-        ✔ lien vol détail + test @done (3/5/2025, 10:35:48 AM)
-        ✔ lien reservation vol + test @done (3/5/2025, 10:35:48 AM)
-
-
-
-☐ Mise en place des headers et des footers de chaque page : 
-
-    Admin : 
-        ✔ vol liste + test @done (3/5/2025, 11:43:13 AM)
-        ✔ vol insertion + test @done (3/5/2025, 11:43:14 AM)
-        ✔ vol détail + test @done (3/5/2025, 11:43:15 AM)
-        ✔ reservation annulation + test @done (3/5/2025, 11:43:15 AM)
-    
-    Client : 
-        ✔ vol detail + test @done (3/5/2025, 11:43:19 AM)
-        ✔ reservation vol + test @done (3/5/2025, 11:43:20 AM)
+    ✔ Classe Reservation : @done (4/12/2025, 5:00:00 PM)
+        - modification de setReservationFilles(vol, DetailReservation) 
+            => prix de base départ %promotion de categorie 
             
+    Affichage : 
 
-☐ Mise en place des formulaires : 
-    
-    Admin : 
-        ✔ connection @done (3/12/2025, 2:53:02 PM)
-        ✔ insertion vol @done (3/12/2025, 3:06:43 PM)
-        ✔ annulation reservation @done (3/17/2025, 11:56:07 AM)
+    ☐ page Reservation : 
+        modification de modal : select classe,  select categorie , 
+            input number + bouton ajouter(icon ajout en js) + reserver(submit)
+            => avec affichage des éléments ajouter dans un tableau 
+            en input type hidden pour la stockage des données
 
-    Client : 
-        ✔ reservation vol @done (3/17/2025, 11:56:09 AM)
-
-✔ Test général du projet : @done (3/17/2025, 11:56:11 AM)
-
-    Test Admin 
-    Test Client
-
-Reste à faire  :
-    ✔ Suppression de la session utilisateur apres deconnection @done (4/3/2025, 10:29:03 AM)
-
-
-    Modification des URLs : 
-        Si cas d'erreur dans l'objet binding : 
-            . On laisse le developpeur décidé de 
-
-
-    Ajout de prix : ( En spring)
-        adulte 
-        enfant
-
-    Ajout de frontOffice : 
-        annulation de reservation + saisi 
-
-
-
-SPRINGBOOT : 
-    ☐ Modification de la conception : 
-        Ajout de catégorie d'age + limite 
-        Modification fonction de promotion selon catégorie
-
-
-    ☐ Client : 
-        Insertion de nb enfant et adulte pour une reservation effectué 
+    Intégration : 
+    ☐ Méthode réservation : String[] categories 
+    ☐ Appel de setById(Connection, categories)

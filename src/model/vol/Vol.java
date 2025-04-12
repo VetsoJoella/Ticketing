@@ -125,17 +125,19 @@ public class Vol {
         return prixVols;
     }
 
-    public void setPrixVols(PrixVol[] PrixVols) throws Exception{
-        this.prixVols = PrixVols; 
+    public void setPrixVols(PrixVol[] prixVols) throws Exception{
+        System.out.println("Appel de setPrixVols "+prixVols.length);
+        this.prixVols = prixVols; 
         setBillets(genererBillet(getPrixVols()));
 
     }
 
-    public void setPrixVols(String[] classeAvions, double[] prix) throws Exception{
+    public void setPrixVols(Connection connexion, String[] classeAvions, double[] prix) throws Exception{
 
         List<PrixVol> prixVols = new ArrayList<>() ; 
         for (int i = 0; i < prix.length; i++) {
-            prixVols.add(new PrixVol(classeAvions[i], prix[i])) ; 
+            prixVols.add(new PrixVol(ClasseAvion.getById(connexion, classeAvions[i]), prix[i])) ; 
+             
         }
         setPrixVols(prixVols.toArray(new PrixVol[0]));
         // this.prixVols = PrixVols;
@@ -221,6 +223,10 @@ public class Vol {
         return dernierReservation;
     }
 
+    public Timestamp getDateDernierReservation() {
+        return DateUtil.ajouterHeure(getDateHeureDecollage(), -getDernierReservation());
+    }
+
     public void setDernierReservation(float dernierReservation) {
         this.dernierReservation = dernierReservation;
     }
@@ -232,6 +238,11 @@ public class Vol {
     public float getDerniereAnnulation() {
         return derniereAnnulation;
     }
+
+    public Timestamp getDateDerniereAnnulation() {
+        return DateUtil.ajouterHeure(getDateHeureDecollage(), -getDerniereAnnulation());
+    }
+
 
     public void setDerniereAnnulation(float derniereAnnulation) {
         this.derniereAnnulation = derniereAnnulation;

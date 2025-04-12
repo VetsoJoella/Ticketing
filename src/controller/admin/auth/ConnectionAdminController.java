@@ -32,10 +32,10 @@ public class ConnectionAdminController {
     public String insertionVol(Vol vol, @Param(name ="classeAvions[]") String[] classeAvions, @Param(name="promotions[]") float[] pourcentages, @Param(name="prix[]") double[] prix, @Param(name="nbs[]") int[] nbs, UtilDb utilDb, RedirectAttributes redirectAttributes){
  
         try(Connection connection = utilDb.getConnection()) {
-            vol.setPrixVols(classeAvions, prix);
+            vol.setPrixVols(connection, classeAvions, prix);
             vol.setPromotions(classeAvions, nbs, pourcentages);
             vol.insert(connection);
-            redirectAttributes.addFlashAttribute("message", "ol inséré avec succès");
+            redirectAttributes.addFlashAttribute("message", "Vol inséré avec succès");
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("message", e.getMessage());
@@ -70,7 +70,7 @@ public class ConnectionAdminController {
         ModelView modelView = new ModelView("/views/admin/reservation-liste.jsp") ; 
         
         try(Connection connection = utilDb.getConnection()) {
-            vol.setPrixVols(classeAvions, prix);
+            vol.setPrixVols(connection, classeAvions, prix);
             vol.setPromotions(classeAvions, nbs, pourcentages);
             vol.update(connection);
             vol.updatePromotion(connection);

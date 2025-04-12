@@ -15,6 +15,7 @@ import itu.springboot.view.response.RedirectAttributes;
 
 import model.avion.Avion;
 import model.utilisateur.admin.Admin;
+import model.utilisateur.categorie.Categorie;
 import model.utilisateur.passager.Passager;
 import model.vol.Vol;
 import model.vol.reservation.Reservation;
@@ -97,18 +98,19 @@ public class ConnectionClientController {
 
     @Url(url="/client/reservation")
     @Post 
-    public String reserverUnVol(Vol vol, @Param(name="nbs[]") int[] nbs, @Param(name="classeAvions[]")String[] classeAvions, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
+    public String reserverUnVol(Vol vol, @Param(name="nbs[]") Integer[] nbs, @Param(name="classeAvions[]")String[] classeAvions, @Param(name="classeAvions[]")String[] categorieStr, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
 
         try (Connection connection = utilDb.getConnection()) {
             // System.out.println("Valeur de vol est "+vol);
-            // System.out.println("Valeur de nbs et de classe Avion est ");
-            // for (int i = 0; i < classeAvions.length; i++) {
-            //     System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]);
-            // }
+            System.out.println("Valeur de nbs et de classe Avion est ");
+            for (int i = 0; i < classeAvions.length; i++) {
+                System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]);
+            }
             // vol.setBilletDisponibles(connection) ; vol.setPromotion(connection);
             vol = Vol.getById(connection, vol.getId()) ;
+            Categorie[] categories = Categorie.getById(connection, categorieStr) ;
             Reservation reservation = new Reservation((Passager)session.get("utilisateur"), null) ;
-            reservation.setReservationFilles(vol, classeAvions, nbs);
+            reservation.setReservationFilles(vol, classeAvions, categories, nbs);
             vol.reserver(connection, reservation);
 
             redirectAttributes.addFlashAttribute("message", "Vol réservé") ;

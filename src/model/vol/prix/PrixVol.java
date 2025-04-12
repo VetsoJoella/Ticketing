@@ -17,7 +17,7 @@ import model.vol.Vol;
 public class PrixVol {
     private String id;          // Identifiant du prix
     private ClasseAvion classeAvion; // Classe d'avion associée
-    private double prix;        // Prix du vol pour cette classe
+    public double prix;        // Prix du vol pour cette classe
 
     // Constructeur
     public PrixVol(Classe classe, Avion avion, double prix ) throws ValeurInvalideException{
