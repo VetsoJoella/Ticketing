@@ -2,8 +2,10 @@
 <%@ page import="model.vol.Vol"%>
 <%@ page import="model.vol.prix.PrixVol" %>
 <%@ page import="model.vol.prix.promotion.Promotion" %>
+<%@ page import="model.utilisateur.categorie.Categorie" %>
 
 <% Vol vol = (Vol)Bloom.out(request, "vol") ;  
+  Categorie[] categories = (Categorie)Bloom.out(request, "categories") ;
   if(vol==null) {
     vol = new Vol() ;
   }
@@ -115,40 +117,75 @@
       </div>
     </div>
     <div class="modal fade" id="basicModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Réservation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h6 class="card-title mb-2">Prix du voyage</h6>
-                    <form method="post" action="${pageContext.request.contextPath}/client/reservation">
-                        <input type="hidden" name="vol.id" value="<%= vol.getId() %>">
-                        <% for(int i = 0; i<vol.getPrixVols().length ; i++ ) { 
-                            PrixVol prixVol = vol.getPrixVols()[i] ; 
-                        
-                        %>
-                        <div class="row mb-3">
-                            <label for="inputPassword3" class="col-sm-4 col-form-label text-center"> Classe <%= prixVol.getClasseAvion().getClasse().getType() %></label>
-                            <input type="hidden" name="classeAvions[]" value="<%= prixVol.getClasseAvion().getId() %>">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Réservation</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <h6 class="card-title mb-2">Prix du voyage</h6>
+                  <form method="post" action="${pageContext.request.contextPath}/client/reservation" id="reservationForm">
+                      <input type="hidden" name="vol.id" value="<%= vol.getId() %>">
 
-                            <div class="col-4 form-floating">
-                                <input type="number" name="nbs[]" class="form-control" >
-                                <label for="nb">Nb place</label>
-                            </div>
-                        </div>
-                        <% } %>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Réserver</button>
-                        </div>
-                    </form>
-                </div>
-                
-            </div>
-        </div>
-    </div><!-- End Basic Modal-->
+                      <div class="row mb-3 align-items-end">
+                          <div class="col-md-4">
+                              <label>Classe</label>
+                              <select class="form-select" id="selectClasse">
+                                  <% for (PrixVol prixVol : vol.getPrixVols()) { %>
+                                      <option value="<%= prixVol.getClasseAvion().getId() %>">
+                                          <%= prixVol.getClasseAvion().getClasse().getType() %>
+                                      </option>
+                                  <% } %>
+                              </select>
+                          </div>
+
+                          <div class="col-md-4">
+                              <label>Age</label>
+                              <select class="form-select" id="selectCategorie">
+                                  <% for (Categorie categorie : categories) { %>
+                                      <option value="<%= categorie.getId() %>">
+                                          <%= categorie.getNom() %>
+                                      </option>
+                                  <% } %>
+                              </select>
+                          </div>
+
+                          <div class="col-md-3">
+                              <label>Nb places</label>
+                              <input type="number" class="form-control" id="nbPlaces" min="1">
+                          </div>
+
+                          <div class="col-md-1 text-end">
+                              <button type="button" class="btn btn-success" id="btnAjouter">
+                                  <i class="bi bi-plus-circle"></i>
+                              </button>
+                          </div>
+                      </div>
+
+                      <!-- Tableau affichant les éléments ajoutés -->
+                      <table class="table table-bordered" id="tableReservation">
+                          <thead>
+                              <tr>
+                                  <th>Classe</th>
+                                  <th>Catégorie</th>
+                                  <th>Nb places</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody></tbody>
+                      </table>
+
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                          <button type="submit" class="btn btn-primary">Réserver</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>
+
   </section>
 <%@ include file="/views/template/footer.html" %>
 

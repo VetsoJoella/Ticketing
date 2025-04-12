@@ -12,6 +12,7 @@ import java.util.List;
 import exception.model.reservation.ReservationException;
 import model.avion.Avion;
 import model.avion.modele.Modele;
+import model.utilisateur.categorie.Categorie;
 import model.utilisateur.passager.Passager;
 import model.vol.Vol;
 import model.vol.billet.Billet;
@@ -153,11 +154,22 @@ public class Reservation {
         this.reservationFilles = reservationFilles;
     }
 
-    public void setReservationFilles(Vol vol, String[] classeAvions, Integer[] nbs) throws ReservationException {
+    // public void setReservationFilles(Vol vol, String[] classeAvions, String[] categories, Integer[] nbs) throws ReservationException {
+        
+    //     List<DetailReservation> detailReservations = new ArrayList<>() ;
+    //     for (int i = 0; i < classeAvions.length; i++) {
+    //         detailReservations.add(new DetailReservation(classeAvions[i], categories[i], nbs[i])) ;
+    //     }
+    //     setReservationFilles(vol, detailReservations.toArray(new DetailReservation[0]));
+    // }
+
+    public void setReservationFilles(Vol vol, String[] classeAvions, Categorie[] categories, Integer[] nbs) throws ReservationException {
         
         List<DetailReservation> detailReservations = new ArrayList<>() ;
         for (int i = 0; i < classeAvions.length; i++) {
-            detailReservations.add(new DetailReservation(classeAvions[i], nbs[i])) ;
+            DetailReservation detailReservation = new DetailReservation(classeAvions[i], nbs[i]) ;
+            detailReservation.setCategorie(categories[i]);
+            detailReservations.add(detailReservation) ;
         }
         setReservationFilles(vol, detailReservations.toArray(new DetailReservation[0]));
     }
@@ -177,7 +189,8 @@ public class Reservation {
                 promotion.setAChange(false);
                 for (int i = 0; i < detailReservation.getNb(); i++) {
                     ReservationFille reservationFille = new ReservationFille(null, 0, disponibles[i]) ;
-                    
+                    double prixVol = disponibles[i].getPrixVol().getPrix()*detailReservation.getCategorie().getPromotionSansPourcentage() ;
+                    disponibles[i].getPrixVol().prix = (prixVol);
                     if(promotion.getReste()>0){
                         reservationFille.setPromotion(promotion.getPourcentage());
                         promotion.diminuerReste(1);
