@@ -76,9 +76,9 @@ public class Categorie {
     static Categorie getById(Connection connection, String id) throws Exception {
         
         
-        String requete = "SELECT * from v_categorie_age " ;
+        String requete = "SELECT * from v_categorie_age where id = ?" ;
         try(PreparedStatement preparedStatement = connection.prepareStatement(requete)) {
-
+            preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 return (new Categorie(rs.getString("id"), rs.getString("nom"), rs.getDouble("promotion"))) ;

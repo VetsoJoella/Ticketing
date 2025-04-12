@@ -86,7 +86,9 @@ public class ConnectionClientController {
         ModelView modelView = new ModelView("/views/client/vol-detail.jsp") ; 
         try (Connection connection = utilDb.getConnection()) {
             Vol vol = Vol.getById(connection, id) ; 
+            Categorie[] categories = Categorie.getAll(connection) ;
             modelView.add("vol", vol) ;
+            modelView.add("categories", categories) ;
 
         } catch (Exception e) {
             modelView.add("message", e.getMessage()) ;
@@ -98,13 +100,13 @@ public class ConnectionClientController {
 
     @Url(url="/client/reservation")
     @Post 
-    public String reserverUnVol(Vol vol, @Param(name="nbs[]") Integer[] nbs, @Param(name="classeAvions[]")String[] classeAvions, @Param(name="classeAvions[]")String[] categorieStr, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
+    public String reserverUnVol(Vol vol, @Param(name="nbs[]") Integer[] nbs, @Param(name="classeAvions[]")String[] classeAvions, @Param(name="categories[]")String[] categorieStr, Session session, UtilDb utilDb, RedirectAttributes redirectAttributes) {
 
         try (Connection connection = utilDb.getConnection()) {
             // System.out.println("Valeur de vol est "+vol);
             System.out.println("Valeur de nbs et de classe Avion est ");
             for (int i = 0; i < classeAvions.length; i++) {
-                System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]);
+                System.out.println("Classe avion "+classeAvions[i]+" nb : "+nbs[i]+" catégorie "+categorieStr[i]);
             }
             // vol.setBilletDisponibles(connection) ; vol.setPromotion(connection);
             vol = Vol.getById(connection, vol.getId()) ;

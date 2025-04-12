@@ -9,6 +9,7 @@
   if(vol==null) {
     vol = new Vol() ;
   }
+  if(categories ==null) categories = new Categorie[0] ;
        
 %>
 

@@ -197,6 +197,7 @@ public class Reservation {
                         promotion.setAChange(true);
                     }
                     reservationFilles.add(reservationFille);
+                    vol.fixerBillet(disponibles[i]);
                     
                 }
             }

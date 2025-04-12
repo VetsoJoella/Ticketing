@@ -35,9 +35,9 @@ btnAjouter.addEventListener("click", function () {
         <td>${categorieText}</td>
         <td>${nbPlaces}</td>
 
-        <input type="hidden" name="classeAvions[${index}]" value="${classeId}">
-        <input type="hidden" name="categories[${index}]" value="${categorieId}">
-        <input type="hidden" name="nbs[${index}]" value="${nbPlaces}">
+        <input type="hidden" name="classeAvions[]" value="${classeId}">
+        <input type="hidden" name="categories[]" value="${categorieId}">
+        <input type="hidden" name="nbs[]" value="${nbPlaces}">
     `;
 
     tableBody.appendChild(row);
