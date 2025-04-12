@@ -252,6 +252,13 @@ public class Vol {
         setDerniereAnnulation(Float.valueOf(derniereAnnulation));
     }
 
+    public void fixerBillet(Billet billet){
+        List<Billet> liste = new ArrayList<>(Arrays.asList(getBilletDisponibles()));
+        liste.remove(billet);
+        setBilletDisponibles(liste.toArray(new Billet[0]));
+
+    }
+
     // Méthode toString
     @Override
     public String toString() {

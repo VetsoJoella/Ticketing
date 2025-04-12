@@ -21,12 +21,28 @@ Ajout de promotion :
             
     Affichage : 
 
-    ☐ page Reservation : 
+    ✔ page Reservation : @done (4/12/2025, 6:17:39 PM)
         modification de modal : select classe,  select categorie , 
             input number + bouton ajouter(icon ajout en js) + reserver(submit)
             => avec affichage des éléments ajouter dans un tableau 
             en input type hidden pour la stockage des données
 
     Intégration : 
-    ☐ Méthode réservation : String[] categories 
-    ☐ Appel de setById(Connection, categories)
+    ✔ Méthode réservation : String[] categories @done (4/12/2025, 6:17:42 PM)
+    ✔ Appel de setById(Connection, categories) @done (4/12/2025, 6:17:43 PM)
+
+
+Ajout de image :
+
+    Base : 
+        - col img ; 
+    
+    Métier : 
+        ☐ Classe Reservation : 
+            - args : image 
+            - modif getAll + getById 
+            - getImage + setImage
+    
+    Affichage : 
+        ☐ Modification affichage : Ajout de profil + description + image
+
