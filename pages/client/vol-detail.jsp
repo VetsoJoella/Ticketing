@@ -126,9 +126,9 @@
               </div>
               <div class="modal-body">
                   <h6 class="card-title mb-2">Prix du voyage</h6>
-                  <form method="post" action="${pageContext.request.contextPath}/client/reservation" id="reservationForm">
+                  <form method="post" action="${pageContext.request.contextPath}/client/reservation" id="reservationForm" enctype="multipart/form-data">
                       <input type="hidden" name="vol.id" value="<%= vol.getId() %>">
-
+                      <input type="file" name="image" accept="image/*" class="form-control">
                       <div class="row mb-3 align-items-end">
                           <div class="col-md-4">
                               <label>Classe</label>
