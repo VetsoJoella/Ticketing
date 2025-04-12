@@ -27,7 +27,7 @@ import model.vol.ville.Ville;
 @Role(value = Passager.class)
 public class ConnectionClientController {
 
-    private final String pathFile = "D:\\apache-tomcat-10.1.7\\webapps\\Ticketing\\assets\\images" ;
+    private final String pathFile = "C:\\xampp\\htdocs\\CDN-NiceAdmin\\img\\ticketing\\" ;
     // Annulation de réservation d'un client 
     @Url(url = "/client/reservation")
     public String annulationReservation(String id, UtilDb utilDb, RedirectAttributes redirectAttributes) {
