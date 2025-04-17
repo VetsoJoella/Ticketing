@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.utilisateur.categorie.Categorie;
 import model.vol.billet.Billet;
 import model.vol.reservation.Reservation;
 
@@ -15,6 +16,7 @@ public class ReservationFille {
     String id ; 
     float promotion ; 
     Billet billet ; 
+    Categorie categorie ;
     float prix ; 
 
     // Constructeur 
@@ -29,6 +31,22 @@ public class ReservationFille {
         setPromotion(promotion);
         setBillet(billet);
     }
+
+    public ReservationFille(String id, float promotion, Billet billet, Categorie categorie) {
+        setId(id);
+        setPromotion(promotion);
+        setBillet(billet);
+        setCategorie(categorie);
+    }
+
+    public ReservationFille(String id, float promotion, float prix, Billet billet, Categorie categorie) {
+        setId(id);
+        setPromotion(promotion);
+        setBillet(billet);
+        setCategorie(categorie);
+        setPrix(prix);
+    }
+
     // Getters et setters 
     public String getId() {
         return this.id;
@@ -48,6 +66,14 @@ public class ReservationFille {
 
     public void setPromotion(float promotion) {
         this.promotion = promotion;
+    }
+
+    public Categorie getCategorie() {
+        return categorie ;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie ;
     }
 
     public float getPrix() {
@@ -74,7 +100,7 @@ public class ReservationFille {
     public static void insert(Connection connexion, Reservation reservation, ReservationFille[] reservationFilles) throws Exception {
 
         if(reservationFilles == null || reservation == null) return ; 
-        String requete = "INSERT INTO reservationFille (id, promotion, idBillet, idReservation, d_prix) VALUES (DEFAULT, ?, ?, ?, ?)";
+        String requete = "INSERT INTO reservationFille (id, promotion, idBillet, idReservation, d_prix, idCategorie) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement declaration = connexion.prepareStatement(requete)) {    
             for (ReservationFille reservationFille : reservationFilles) {
@@ -82,6 +108,7 @@ public class ReservationFille {
                 declaration.setString(2, reservationFille.getBillet().getId());
                 declaration.setString(3, reservation.getId());
                 declaration.setDouble(4, reservationFille.getPrixAvecPromotion());
+                declaration.setString(5, reservationFille.getCategorie().getId());
                 declaration.addBatch(); // Ajouter à la batch
             }
     
@@ -93,7 +120,7 @@ public class ReservationFille {
     public static ReservationFille[] getByReservation(Connection connexion, String idReservation) throws Exception {
 
         List<ReservationFille> reservationFilles = new ArrayList<>() ;
-        String requete = "SELECT * from reservationfille WHERE idReservation = ? " ;
+        String requete = "SELECT * from v_reservationfille_categorie WHERE idReservation = ? " ;
         
         try (PreparedStatement declaration = connexion.prepareStatement(requete)) {    
             declaration.setString(1, idReservation);
@@ -104,7 +131,10 @@ public class ReservationFille {
                     new ReservationFille(
                         resultat.getString("id"), 
                         resultat.getFloat("promotion"), 
-                        null)
+                        resultat.getFloat("d_prix"), 
+                        Billet.getById(connexion, resultat.getString("idBillet")), 
+                        new Categorie(resultat.getString("idCategorie"), resultat.getString("nom"))
+                    )
                 );
             }
         }

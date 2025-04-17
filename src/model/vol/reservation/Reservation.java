@@ -190,6 +190,7 @@ public class Reservation {
                 promotion.setAChange(false);
                 for (int i = 0; i < detailReservation.getNb(); i++) {
                     ReservationFille reservationFille = new ReservationFille(null, 0, disponibles[i]) ;
+                    reservationFille.setCategorie(detailReservations[i].getCategorie()) ;
                     double prixVol = disponibles[i].getPrixVol().getPrix()*detailReservation.getCategorie().getPromotionSansPourcentage() ;
                     disponibles[i].getPrixVol().prix = (prixVol);
                     if(promotion.getReste()>0){
