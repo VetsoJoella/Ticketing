@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="view.*"%>
 <% Object message = Bloom.out(request, "message") ; 
-    out.println(message);
   if(message!=null){ %>
     <script> alert("<%= (String)message %>") </script>
   <% } 

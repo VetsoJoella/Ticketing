@@ -102,7 +102,7 @@ public class Billet {
         }
     }
 
-     public static Billet[] getBilletDisponible(Connection connexion, Vol vol) throws Exception {
+    public static Billet[] getBilletDisponible(Connection connexion, Vol vol) throws Exception {
         
         List<Billet> billets = new ArrayList<>() ;
         String requete = "SELECT * from v_billet_disponible where idVol = ? " ;
@@ -117,4 +117,19 @@ public class Billet {
 
         return billets.toArray(new Billet[0]);
     }
+
+    public static Billet getById(Connection connexion, String id) throws Exception {
+        
+        String requete = "SELECT * from billet where id = ? " ;
+        Billet billet = null ; 
+
+        try (PreparedStatement declaration = connexion.prepareStatement(requete)) {
+            declaration.setString(1, id);
+            ResultSet resultat = declaration.executeQuery();
+            while (resultat.next()) {
+                billet = (new Billet(resultat.getString("id"), PrixVol.getById(connexion, resultat.getString("idprixvol"))));
+            }
+        }
+        return billet ; 
+    }   
 }
